@@ -170,10 +170,19 @@ function showMessage(text, type) {
 }
 
 function showFinalScore() {
-  const scoreEl = document.getElementById("score");
-  scoreEl.textContent = `${correctCount} Correct, ${incorrectCount} Incorrect`;
+  const overlay = document.getElementById("modal-overlay");
+  const modalScore = document.getElementById("modal-score");
+
+  modalScore.textContent = `${correctCount} Correct, ${incorrectCount} Incorrect`;
+  overlay.classList.add("show");
 }
 
+const closeBtn = document.getElementById("modal-close");
+if (closeBtn) {
+  closeBtn.addEventListener("click", () => {
+    location.reload();
+  });
+}
 
 
 
