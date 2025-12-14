@@ -158,7 +158,7 @@ function handleGuess(clickedLatLng) {
   setTimeout(() => {
     waiting = false;
     showCurrentQuestion();
-  }, 2000);
+  }, 1000);
 }
 
 function showMessage(text, type) {
@@ -168,6 +168,12 @@ function showMessage(text, type) {
   li.classList.add(type);
   messagesList.appendChild(li);
 }
+
+function showFinalScore() {
+  const scoreEl = document.getElementById("score");
+  scoreEl.textContent = `${correctCount} Correct, ${incorrectCount} Incorrect`;
+}
+
 
 
 
