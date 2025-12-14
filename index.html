@@ -1,11 +1,25 @@
-<!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
-</head>
-<body>
+  <head>
+    <title>Add a Map using HTML</title>
 
-</body>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script type="module" src="./index.js"></script>
+  </head>
+  <body>
+    <gmp-map
+      center="38.7946,-106.5348"
+      zoom="4"
+      map-id="DEMO_MAP_ID"
+      style="height: 400px"
+    >
+    </gmp-map>
+
+    <!--
+      The `defer` attribute causes the script to execute after the full HTML
+      document has been parsed. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSZ1S8chrLuiwB58s4zkUc1LRnZfzIH1o&libraries=maps"
+      defer
+    ></script>
+  </body>
 </html>
