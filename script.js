@@ -4,12 +4,13 @@ let correctCount = 0;
 let incorrectCount = 0;
 let rectangles = [];  // store drawn rectangles
 let gameOver = false;
-let waiting = false;  // when true, disables clicking while loading next question
+let waiting = false;  // when true, disables clicking while loading next question\
+let startTime;
 
 /* ======================================= */
 // --- Google Map Embed Setup ---
 function initMap() {
-  const csun = { lat: 34.2397, lng: -118.528 };
+  const csun = { lat: 34.239646751594364, lng: -118.53170402724649 };
 
   map = new google.maps.Map(document.getElementById("map"), {
     center: csun,
@@ -23,12 +24,15 @@ function initMap() {
 
   setupDoubleClickHandler();
   showCurrentQuestion();
+
+  startTime = Date.now();
 }
 /* ======================================= */
 
 
 /* ======================================= */
-// --- 5 Locations and their coordinates ---
+// --- 5 Locations ---
+
 const locations = [
   {
     name: "Where is the Adam Klotz Health Center?",
@@ -77,6 +81,10 @@ const locations = [
   }
 ];
 /* ======================================= */
+
+
+/* ======================================= */
+// --- Question Behavior ---
 
 function showCurrentQuestion() {
   const messagesList = document.getElementById("messages");
@@ -158,7 +166,7 @@ function handleGuess(clickedLatLng) {
   setTimeout(() => {
     waiting = false;
     showCurrentQuestion();
-  }, 1000);
+  }, 1000); // Add a second delay after each question, clicking is disabled while next question loads
 }
 
 function showMessage(text, type) {
@@ -168,22 +176,60 @@ function showMessage(text, type) {
   li.classList.add(type);
   messagesList.appendChild(li);
 }
+/* ======================================= */
+
+
+/* ======================================= */
+// --- Final Score Behavior ---
 
 function showFinalScore() {
   const overlay = document.getElementById("modal-overlay");
   const modalScore = document.getElementById("modal-score");
+  const modalTime = document.getElementById("modal-time");
+  const modalHighscore = document.getElementById("modal-highscore");
 
+  // Calculate esalpsed time in seconds
+  const elapsedMs = Date.now() - startTime;
+  const elapsedSeconds = Math.round(elapsedMs / 1000);
+
+  const totalQuestions = locations.length;
+
+  // Show final score
   modalScore.textContent = `${correctCount} Correct, ${incorrectCount} Incorrect`;
+  modalTime.textContent = `Time: ${elapsedSeconds} second${elapsedSeconds === 1 ? "" : "s"}`;
+  
+  // High score logic
+  const storageKey = "mapQuizBestTime";
+  const bestStr = localStorage.getItem(storageKey);
+  let bestTime = bestStr ? parseInt(bestStr, 10) : null;
+
+  modalHighscore.textContent = "";
+
+  if (correctCount === totalQuestions) {
+    if (bestTime === null || elapsedSeconds < bestTime) { // if the user sets a new best time during a perfect run (5/5 questions) the game will save that time
+      localStorage.setItem(storageKey, elapsedSeconds.toString());
+      bestTime = elapsedSeconds;
+      modalHighscore.textContent = `Best time: ${elapsedSeconds} second${elapsedSeconds === 1 ? "" : "s"} (new high score!)`;
+    } else { // it will display the their previous best time
+      modalHighscore.textContent = `Best time: ${bestTime} second${bestTime === 1 ? "" : "s"}`;
+    }
+  } else { // if the user didn't get 5/5 correct, it will display their previous best time
+    if (bestTime !== null) {
+      modalHighscore.innerHTML = `Best time: ${bestTime} second${bestTime === 1 ? "" : "s"}<br><br>` + `Get 5/5 correct to set a best time!`;
+    } else { // if the user didn't get 5/5 correct, and doesn't have a previous best time, it will display nothing
+      modalHighscore .textContent = "";
+    }
+  }
+
+  // Show the modal
   overlay.classList.add("show");
 }
 
+// Play Again Button
 const closeBtn = document.getElementById("modal-close");
 if (closeBtn) {
   closeBtn.addEventListener("click", () => {
     location.reload();
   });
 }
-
-
-
-
+/* ======================================= */

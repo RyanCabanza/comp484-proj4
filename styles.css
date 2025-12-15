@@ -1,19 +1,31 @@
-/* style.css */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-#container {
-  display: flex;
+  font-family: "Geologica", sans-serif;
   height: 100vh;
 }
 
+#container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
 #sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   width: 35%;
-  background-color: #e1d2a3; /* beige-ish */
   padding: 20px;
   box-sizing: border-box;
+  z-index: 10;
+  background: linear-gradient(
+    to right,
+    rgba(225, 210, 163, 1) 0%,
+    rgba(225, 210, 163, 0.7) 60%,
+    rgba(225, 210, 163, 0.0) 100%
+  );
 }
 
 #sidebar h1 {
@@ -26,7 +38,12 @@ body {
 }
 
 #map {
-  flex: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .question {
@@ -92,8 +109,19 @@ body {
 
 #modal-score {
   font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+#modal-time {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+#modal-highscore {
+  font-size: 1.1rem;
   margin-bottom: 20px;
 }
+
 
 #modal-close {
   padding: 8px 16px;
